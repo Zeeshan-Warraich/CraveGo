@@ -2,6 +2,10 @@ import { useMemo, useState, useEffect, useCallback, useRef } from 'react'
 import './index.css'
 import AdminDashboard from './AdminDashboard'
 
+const API_BASE_URL = (
+  import.meta.env.VITE_API_URL || '${API_BASE_URL}'
+).replace(/\/$/, '')
+
 type Restaurant = {
   id: number
   name: string
@@ -171,7 +175,7 @@ useEffect(() => {
       setMenuError('')
 
       const response = await fetch(
-        `http://localhost:5000/api/menu-items?restaurant_id=${selectedRestaurant.id}`
+        `${API_BASE_URL}/api/menu-items?restaurant_id=${selectedRestaurant.id}`
       )
 
       if (!response.ok) {
@@ -223,7 +227,7 @@ useEffect(() => {
       setRestaurantsError('')
 
       const response = await fetch(
-        'http://localhost:5000/api/restaurants',
+        `${API_BASE_URL}/api/restaurants`,
         { signal: AbortSignal.timeout(15000) },
       )
 
@@ -314,7 +318,7 @@ useEffect(() => {
       }
 
       const response = await fetch(
-        'http://localhost:5000/api/orders',
+        `${API_BASE_URL}/api/orders`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -438,7 +442,7 @@ const [orderSubmitting, setOrderSubmitting] = useState(false)
       setRestaurantDashboardError('')
 
       const response = await fetch(
-        'http://localhost:5000/api/restaurant/dashboard',
+        `${API_BASE_URL}/api/restaurant/dashboard`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -560,7 +564,7 @@ const [orderSubmitting, setOrderSubmitting] = useState(false)
       }
 
       const response = await fetch(
-        `http://localhost:5000/api/restaurant/orders/${order.id}/status`,
+        `${API_BASE_URL}/api/restaurant/orders/${order.id}/status`,
         {
           method: 'PATCH',
           headers: {
@@ -654,8 +658,8 @@ const [orderSubmitting, setOrderSubmitting] = useState(false)
         editingRestaurantMenuItemId !== null
 
       const url = isEditing
-        ? `http://localhost:5000/api/restaurant/menu/${editingRestaurantMenuItemId}`
-        : 'http://localhost:5000/api/restaurant/menu'
+        ? `${API_BASE_URL}/api/restaurant/menu/${editingRestaurantMenuItemId}`
+        : `${API_BASE_URL}/api/restaurant/menu`
 
       const response = await fetch(url, {
         method: isEditing ? 'PATCH' : 'POST',
@@ -719,7 +723,7 @@ const [orderSubmitting, setOrderSubmitting] = useState(false)
       setRestaurantMenuDeletingId(item.id)
 
       const response = await fetch(
-        `http://localhost:5000/api/restaurant/menu/${item.id}`,
+        `${API_BASE_URL}/api/restaurant/menu/${item.id}`,
         {
           method: 'DELETE',
           headers: {
@@ -858,7 +862,7 @@ const handlePlaceOrder = async () => {
     }
 
     const response = await fetch(
-      'http://localhost:5000/api/orders',
+      `${API_BASE_URL}/api/orders`,
       {
         method: 'POST',
 
@@ -973,7 +977,7 @@ const handlePlaceOrder = async () => {
       setAuthLoading(true)
 
       const response = await fetch(
-        'http://localhost:5000/api/auth/signup',
+        `${API_BASE_URL}/api/auth/signup`,
         {
           method: 'POST',
           headers: {
@@ -1047,7 +1051,7 @@ const handlePlaceOrder = async () => {
       setAuthLoading(true)
 
       const response = await fetch(
-        'http://localhost:5000/api/auth/login',
+        `${API_BASE_URL}/api/auth/login`,
         {
           method: 'POST',
           headers: {
