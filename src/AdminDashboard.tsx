@@ -2,6 +2,10 @@ import { useEffect, useRef, useState } from 'react'
 import type { FormEvent } from 'react'
 import './AdminDashboard.css'
 
+const API_BASE_URL = (
+  import.meta.env.VITE_API_URL || 'http://localhost:5000'
+).replace(/\/$/, '')
+
 type Tab = 'overview' | 'restaurants' | 'orders' | 'users'
 type AdminRestaurant = {
   id: number; name: string; category: string; description: string; image: string
@@ -30,7 +34,7 @@ const date = (value: string) => new Date(value).toLocaleString()
 async function adminRequest<T>(path: string, options: RequestInit = {}): Promise<T> {
   const token = localStorage.getItem('cravego_token')
   if (!token) throw new Error('Please log in again.')
-  const response = await fetch(`http://localhost:5000/api/admin/${path}`, {
+  const response = await fetch(`${API_BASE_URL}/api/admin/${path}`, {
     ...options,
     headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}`, ...options.headers },
   })
